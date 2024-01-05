@@ -1,0 +1,106 @@
+$bg: rgba(20, 20, 20, 0.7);
+$fg: rgba(255, 100, 0, 0.7);
+
+* {
+  all: unset;
+}
+
+.dock {
+  background-color: $bg;
+  //border-top: 1px solid;
+  //border-right: 1px solid;
+  //border-left: 1px solid;
+  border-bottom: 1px solid;
+  border-color: $fg;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.seperator {
+  color: $fg;
+  border-left: 1px solid;
+
+}
+
+
+.memory {
+  font-family: Hack;
+  color: gold;
+}
+
+.resize {
+  background-color: #252525;
+  color: $fg;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.no-resize {
+  all: unset;
+}
+
+.cpu {
+  font-family: Hack;
+  color: cornflowerblue;
+}
+
+.gpu {
+  font-family: Hack;
+  color: brown;
+}
+
+.active-workspace {
+  padding-left: 3px;
+  padding-right: 3px;
+  background-color: #333333;
+  color: $fg;
+}
+
+.inactive-workspace {
+  padding-left: 3px;
+  padding-right: 3px;
+  color: #ffffff;
+  background-color: #252525;
+}
+
+.monitor {
+  padding: 0;
+}
+
+.battery {
+  color: #77ff77;
+}
+
+.launcher {
+  background-color: $bg;
+  border: 1px solid;
+  border-color: $fg;
+  border-radius: 8px;
+}
+
+.launcher_top_bar {
+  border-bottom: 1px solid;
+  border-color: $fg;
+}
+
+.launcher_button {
+  background-color: #252525;
+  margin: 2px;
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: #101010;
+  padding: 5px;
+}
+
+.launcher_button:hover {
+  background-color: #333333;
+}
+
+.launcher_button:active {
+  background-color: #000000;
+}
+
+.launcher_application_button{
+  background-color: #000000;
+}
