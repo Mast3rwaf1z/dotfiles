@@ -75,7 +75,7 @@ bindsym Mod4+Shift+r reload
 
 bindsym Mod4+Shift+e exec "swaynag -m 'End Sway Session? This will end your wayland session!' --background 22222255 --border-bottom ff5500 --message-padding 12 --button-background ff550055 --button-padding 6 -b 'Yes, exit sway' 'swaymsg exit'"
 
-bindsym Mod4+l exec xlock -mode decay
+bindsym Mod4+l exec gtklock --style /home/mast3r/.config/gtklock.css -b /home/mast3r/Pictures/.theme/bg.png
 bindsym Mod4+p exec grim -g "$(slurp -d)" - | wl-copy
 
 mode "resize" {
@@ -103,6 +103,7 @@ bindsym Mod4+Shift+F5 exec swaynag -m 'rebuild system?' --background 22222255 --
 #}
 
 exec eww open dock
+exec eww open dock_external
 
 exec ckb-next -b
 exec --no-startup-id dunst
@@ -110,6 +111,13 @@ exec --no-startup-id dunst
 input type:keyboard {
   xkb_layout dk
 }
+
+bindsym XF86AudioMute exec amixer -Mq set Master toggle && echo "1" > /tmp/eww.stdin && echo "1" > /tmp/ewwe.stdin
+bindsym XF86AudioRaiseVolume exec amixer set Master 1%+ unmute && echo "1" > /tmp/eww.stdin && echo "1" > /tmp/ewwe.stdin
+bindsym XF86AudioLowerVolume exec amixer set Master 1%- unmute && echo "1" > /tmp/eww.stdin && echo "1" > /tmp/ewwe.stdin
+#bindsym XF86AudioRaiseVolume exec wall test
+#bindsym XF86AudioLowerVolume exec wall test
+
 
 gaps inner 3
 gaps outer 3

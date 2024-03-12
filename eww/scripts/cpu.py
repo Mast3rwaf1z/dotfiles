@@ -9,6 +9,9 @@ def run():
 
     with open("state/cpu.json") as file:
         olddata = json.loads(file.read())
+
+    with open("state/cpu.json", "w") as file:
+        file.write(json.dumps(cpus, indent=4))
     
     chars = [" "] + [chr(i) for i in range(int("2581", 16), int("2589", 16))]
 
@@ -27,9 +30,6 @@ def run():
         line += chars[floor(percentage / (len(chars)+3))]
 
         percentages.append(percentage)
-
-    with open("state/cpu.json", "w") as file:
-        file.write(json.dumps(cpus, indent=4))
 
 
     return f"{'0' if int(sum(percentages)/len(percentages)) < 10 else ''}{int(sum(percentages)/len(percentages))}%{line}"

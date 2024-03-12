@@ -9,9 +9,9 @@
 (defpoll date :interval "1s" "date '+%H:%M:%S'")
 
 (defwidget battery []
-  (box :class "battery" :halign "end" poll_battery)
+  (literal :content battery_content)
 )
-(defpoll poll_battery :interval "10s" "python scripts/battery.py")
+(deflisten battery_content "scripts/battery.sh")
 
 (defwidget networking []
   (box :class "networking" :halign "end" poll_network)
@@ -33,10 +33,30 @@
 )
 (defpoll poll_gpu :interval "1s" "python scripts/gpu.py")
 
+(deflisten volume_content
+    :initial ""
+    "scripts/volume.sh /tmp/eww.stdin")
+
+(defwidget volume []
+  (button :onclick "python scripts/volume.py toggle"
+    (box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+      (literal :content volume_content)
+)))
+
+(deflisten volume_content_external
+    :initial ""
+    "scripts/volume.sh /tmp/ewwe.stdin")
+
+(defwidget volume_external []
+    (button :onclick "python scripts/volume.py toggle"
+        (box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+            (literal :content volume_content_external)
+)))
+
 (defwidget right []
   (box :class "monitor" :halign "end" :space-evenly "false" :spacing "20"
-    (box :class "seperator" "")
-    (gpu)
+    ;(box :class "seperator" "")
+    ;(gpu)
     (box :class "seperator" "")
     (cpu)
     (box :class "seperator" "")
@@ -46,12 +66,37 @@
     (box :class "seperator" "")
     (battery)
     (box :class "seperator" "")
+    (volume)
+    (box :class "seperator" "")
     (time))
 )
 
+(defwidget right_external []
+    (box :class "monitor" :halign "end" :space-evenly "false" :spacing "20"
+    (box :class "seperator" "")
+    (cpu)
+    (box :class "seperator" "")
+    (memory)
+    (box :class "seperator" "")
+    (networking)
+    (box :class "seperator" "")
+    (battery)
+    (box :class "seperator" "")
+    (volume_external)
+    (box :class "seperator" "")
+    (time)
+))
+
+
+
+
 (defwidget workspaces []
   (literal :content workspace))
-(deflisten workspace "scripts/workspace.sh")
+(deflisten workspace "scripts/workspace.sh eDP-1")
+
+(defwidget workspaces_external []
+  (literal :content workspace_external))
+(deflisten workspace_external "scripts/workspace.sh external")
 
 (defwidget resize []
   (literal :content resizer))
@@ -66,11 +111,24 @@
   )
 )
 
+(defwidget left_external []
+  (box :class "left" :halign "start" :space-evenly "false"
+    (workspaces_external)
+    (resize)
+  )
+)
+
 
 (defwidget bar []
   (box :class "dock"
   (left)
   (right))
+)
+
+(defwidget bar_external []
+  (box :class "dock"
+  (left_external)
+  (right_external))
 )
 
 (defwindow dock
@@ -89,39 +147,18 @@
   :wm-ignore true
   (bar))
 
-; Application launcher
-; ################################################### ;
-(defwidget launcher_top_bar []
-  (box :valign "start" :halign "end" :class "launcher_top_bar" :orientation "h" :hexpand true :width "400"
-    (button :class "launcher_button" :onclick "eww close launcher" "X")
-  )
-)
-
-(defwidget launcher_contents []
-  (literal :content launcher_content)
-)
-(deflisten launcher_content "python scripts/launcher.py")
-
-(defwidget launcher_content_scroll []
-  (scroll :vscroll true
-      (launcher_contents)
-  )
-)
-
-(defwidget launcher []
-  (box :width "400" :height "500" :orientation "v"
-  (launcher_top_bar)
-  (launcher_content_scroll)
-  ))
-
-(defwindow launcher
-  :class "launcher"
-  :monitor 0
+(defwindow dock_external
+  :monitor 1
   :geometry (
-    geometry
-      :x "40%"
-      :y "30%"
+    geometry 
+      :x "0%"
+      :y "0.5%"
+      :width "99.4%"
+      :height "2%"
+      :anchor "top center"
   )
   :stacking "fg"
+  :exclusive true
+  :windowtype "dock"
   :wm-ignore true
-(launcher))
+  (bar_external))

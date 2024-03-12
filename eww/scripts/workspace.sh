@@ -1,22 +1,39 @@
-workspaces() {
-	ACTIVE=$(swaymsg -t get_workspaces | jq '.[] | select(.focused==true) | .num')
-	OCCUPIED=$(swaymsg -t get_workspaces | jq '.[] | .num')
+if [[ "$@" =~ "--debug" ]]; then
+	DEBUG="on"
+else
+	DEBUG="off"
+fi
 
-	printf '(box :valign "center" :halign "start"'
+if [[ "$1" == "external" ]]; then
+    index=1
+else
+    index=0
+fi
 
-	for i in $(seq 10); do
-		if ! [[ "${OCCUPIED}" =~ "$i" ]]; then
-			continue
-		fi
-		if [[ "$i" == "$ACTIVE" ]]; then
-			printf "(button :onclick \"swaymsg workspace $i\" :class \"active-workspace\" \"$i\") "
-		else
-			printf "(button :onclick \"swaymsg workspace $i\" :class \"inactive-workspace\" \"$i\") "
-		fi
-	done
+current_display="$(swaymsg -t get_outputs | jq -r ".[$index].name")"
+
+workspaces(){
+	printf '(box :valign "center" :halign "start" '
+    for id in $(swaymsg -t get_workspaces | jq -s '.[] | sort_by(.num) | .[].num'); do
+        workspace_data="$(swaymsg -t get_workspaces | jq -s ".[] | sort_by(.num) | .[] | select(.num == $id)")"
+        display="$(echo $workspace_data | jq -r '.output')"
+        active="$(echo $workspace_data | jq -r '.focused')"
+        if [[ "$display" != "$current_display" ]]; then
+            continue
+        fi
+        if [[ "$active" == "true" ]]; then
+			printf "(button :onclick \"swaymsg workspace $id\" :class \"active-workspace\" \"$id\") "
+        else
+			printf "(button :onclick \"swaymsg workspace $id\" :class \"inactive-workspace\" \"$id\") "
+        fi
+    done
 	printf ")\n"
 }
+
 workspaces
+if [[ "$DEBUG" == "on" ]]; then
+	exit
+fi
 swaymsg -t subscribe -m '["workspace"]' | while read -r _; do
 	workspaces
 done

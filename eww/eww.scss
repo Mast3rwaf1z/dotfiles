@@ -54,7 +54,9 @@ $fg: rgba(255, 100, 0, 0.7);
   padding-left: 3px;
   padding-right: 3px;
   background-color: #333333;
-  color: $fg;
+  color: white;
+  border-top: 1px solid $fg;
+  min-width:16px;
 }
 
 .inactive-workspace {
@@ -62,6 +64,8 @@ $fg: rgba(255, 100, 0, 0.7);
   padding-right: 3px;
   color: #ffffff;
   background-color: #252525;
+  border-top: 1px solid #252525;
+  min-width:16px;
 }
 
 .monitor {
@@ -69,7 +73,6 @@ $fg: rgba(255, 100, 0, 0.7);
 }
 
 .battery {
-  color: #77ff77;
 }
 
 .launcher {
@@ -103,4 +106,10 @@ $fg: rgba(255, 100, 0, 0.7);
 
 .launcher_application_button{
   background-color: #000000;
+}
+.trayicon {
+  background-repeat: no-repeat;
+  background-size: 20px;
+  min-width: 24px;
+  margin: 0px 0px 0px 0px;
 }
