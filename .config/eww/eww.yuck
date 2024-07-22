@@ -1,0 +1,155 @@
+
+
+; TOP BAR
+; ######################################################### ;
+
+(defwidget time []
+  (box :class "time" :halign "end"
+    (button :onclick "notify-send \"$(date)\"" date)))
+(defpoll date :interval "1s" "date '+%H:%M:%S'")
+
+(defwidget networking []
+  (box :class "networking" :halign "end" poll_network)
+)
+(defpoll poll_network :interval "10s" "python scripts/networking.py")
+
+(defwidget memory []
+  (box :class "memory" :halign "end" poll_memory)
+)
+(defpoll poll_memory :interval "1s" "python scripts/memory.py")
+
+(defwidget cpu []
+  (box :class "cpu" :halign "end" poll_cpu)
+)
+(defpoll poll_cpu :interval "1s" "python scripts/cpu.py")
+
+(defwidget gpu []
+  (box :class "gpu" :halign "end" poll_gpu)
+)
+(defpoll poll_gpu :interval "1s" "python scripts/gpu.py")
+
+(deflisten volume_content
+    :initial ""
+    "scripts/volume.sh /tmp/eww.stdin")
+
+(defwidget volume []
+  (button :onclick "python scripts/volume.py toggle"
+    (box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+      (literal :content volume_content)
+)))
+
+(deflisten volume_content_external
+    :initial ""
+    "scripts/volume.sh /tmp/ewwe.stdin")
+
+(defwidget volume_external []
+    (button :onclick "python scripts/volume.py toggle"
+        (box :orientation "h" :spacing 8 :valign "center" :halign "center" :space-evenly "false" :vexpand "false" :hexpand "false"
+            (literal :content volume_content_external)
+)))
+
+(defwidget right []
+  (box :class "monitor" :halign "end" :space-evenly "false" :spacing "20"
+    ;(box :class "seperator" "")
+    ;(gpu)
+    (box :class "seperator" "")
+    (cpu)
+    (box :class "seperator" "")
+    (memory)
+    (box :class "seperator" "")
+    (networking)
+    (box :class "seperator" "")
+    (volume)
+    (box :class "seperator" "")
+    (time))
+)
+
+(defwidget right_external []
+    (box :class "monitor" :halign "end" :space-evenly "false" :spacing "20"
+    (box :class "seperator" "")
+    (cpu)
+    (box :class "seperator" "")
+    (memory)
+    (box :class "seperator" "")
+    (networking)
+    (box :class "seperator" "")
+    (volume_external)
+    (box :class "seperator" "")
+    (time)
+))
+
+
+
+
+(defwidget workspaces []
+  (literal :content workspace))
+(deflisten workspace "scripts/workspace.sh eDP-1")
+
+(defwidget workspaces_external []
+  (literal :content workspace_external))
+(deflisten workspace_external "scripts/workspace.sh external")
+
+(defwidget resize []
+  (literal :content resizer))
+(deflisten resizer "scripts/resize.sh")
+
+(defpoll poll_resizer :interval "1s" "scripts/resize.sh")
+
+(defwidget left []
+  (box :class "left" :halign "start" :space-evenly "false"
+    (workspaces)
+    (resize)
+  )
+)
+
+(defwidget left_external []
+  (box :class "left" :halign "start" :space-evenly "false"
+    (workspaces_external)
+    (resize)
+  )
+)
+
+
+(defwidget bar []
+  (box :class "dock"
+  (left)
+  (right))
+)
+
+(defwidget bar_external []
+  (box :class "dock"
+  (left_external)
+  (right_external))
+)
+
+(defwindow dock
+  :monitor 0
+  :geometry (
+    geometry 
+      :x "0%"
+      :y "0.5%"
+      :width "99.4%"
+      :height "2%"
+      :anchor "top center"
+  )
+  :stacking "fg"
+  :exclusive true
+  :windowtype "dock"
+  :wm-ignore true
+  (bar))
+
+(defwindow dock_external
+  :monitor 1
+  :geometry (
+    geometry 
+      :x "0%"
+      :y "0.5%"
+      :width "99.4%"
+      :height "2%"
+      :anchor "top center"
+  )
+  :stacking "fg"
+  :exclusive true
+  :windowtype "dock"
+  :wm-ignore true
+  (bar_external))

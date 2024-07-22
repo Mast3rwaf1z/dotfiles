@@ -1,0 +1,136 @@
+font pango:Hack 10
+
+exec --no-startup-id nm-applet
+
+floating_modifier Mod4
+
+bindsym Mod4+Return exec konsole
+
+bindsym Mod4+Shift+q kill
+
+bindsym Mod4+d exec --no-startup-id exec rofi -show run
+bindsym Mod4+Shift+d exec --no-startup-id exec eww open launcher
+
+bindsym Mod4+Left focus left 
+bindsym Mod4+Down focus down 
+bindsym Mod4+Up focus up
+bindsym Mod4+Right focus right 
+
+bindsym Mod4+Shift+Left move left 
+bindsym Mod4+Shift+Down move down 
+bindsym Mod4+Shift+Up move up
+bindsym Mod4+Shift+Right move right 
+
+bindsym Mod4+h split h 
+bindsym Mod4+v split v
+bindsym Mod4+f fullscreen toggle
+
+bindsym Mod4+s layout stacking
+bindsym Mod4+w layout tabbed
+bindsym Mod4+e layout toggle split 
+
+bindsym Mod4+Shift+space floating toggle
+
+bindsym Mod4+space focus mode_toggle
+
+bindsym Mod4+a focus parent
+
+bindsym Mod4+F12 move scratchpad
+bindsym F12 scratchpad show, resize set 1900 1000, move position 20px 20px
+
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+bindsym Mod4+1 workspace number $ws1
+bindsym Mod4+2 workspace number $ws2
+bindsym Mod4+3 workspace number $ws3
+bindsym Mod4+4 workspace number $ws4
+bindsym Mod4+5 workspace number $ws5
+bindsym Mod4+6 workspace number $ws6
+bindsym Mod4+7 workspace number $ws7
+bindsym Mod4+8 workspace number $ws8
+bindsym Mod4+9 workspace number $ws9
+bindsym Mod4+0 workspace number $ws10
+
+bindsym Mod4+Shift+1 move container to workspace number $ws1
+bindsym Mod4+Shift+2 move container to workspace number $ws2
+bindsym Mod4+Shift+3 move container to workspace number $ws3
+bindsym Mod4+Shift+4 move container to workspace number $ws4
+bindsym Mod4+Shift+5 move container to workspace number $ws5
+bindsym Mod4+Shift+6 move container to workspace number $ws6
+bindsym Mod4+Shift+7 move container to workspace number $ws7
+bindsym Mod4+Shift+8 move container to workspace number $ws8
+bindsym Mod4+Shift+9 move container to workspace number $ws9
+bindsym Mod4+Shift+0 move container to workspace number $ws10
+
+bindsym Mod4+Shift+r reload
+
+bindsym Mod4+Shift+e exec "swaynag -m 'End Sway Session? This will end your wayland session!' --background 22222255 --border-bottom ff5500 --message-padding 12 --button-background ff550055 --button-padding 6 -b 'Yes, exit sway' 'swaymsg exit'"
+
+bindsym Mod4+l exec gtklock --style /home/mast3r/.config/gtklock.css -b /home/mast3r/Pictures/.theme/bg.png
+bindsym Mod4+p exec grim -g "$(slurp -d)" - | wl-copy
+
+mode "resize" {
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym Mod4+r mode "default"
+}
+
+bindsym Mod4+r mode "resize"
+
+#bar {
+#  status_command i3blocks
+#  position top
+#  colors {
+#    focused_workspace #222222 #ff5500 #ffffff
+#    background #150000
+#  }
+#}
+
+output DP-1 pos 1920 0 scale 2
+output DP-3 pos 0 0 scale 2 adaptive_sync on
+
+exec eww open dock
+exec eww open dock_external
+
+exec ckb-next -b
+exec --no-startup-id dunst
+
+input type:keyboard {
+  xkb_layout dk
+}
+
+bindsym XF86AudioMute exec amixer -Mq set Master toggle && echo "1" > /tmp/eww.stdin && echo "1" > /tmp/ewwe.stdin
+bindsym XF86AudioRaiseVolume exec amixer set Master 1%+ unmute && echo "1" > /tmp/eww.stdin && echo "1" > /tmp/ewwe.stdin
+bindsym XF86AudioLowerVolume exec amixer set Master 1%- unmute && echo "1" > /tmp/eww.stdin && echo "1" > /tmp/ewwe.stdin
+#bindsym XF86AudioRaiseVolume exec wall test
+#bindsym XF86AudioLowerVolume exec wall test
+
+
+gaps inner 3
+gaps outer 3
+default_border pixel 1
+
+exec --no-startup-id pipewire
+
+exec swaybg --image Pictures/.theme/bg.png 
+
+for_window [title=KRunner] move position 660px 5px
+
+corner_radius 8 
+
+#class          border    background    text        indicator   child_border
+client.focused  #ff5500   #222222       #ffffff     #ff5500     #ff5500
